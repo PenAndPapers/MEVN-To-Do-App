@@ -1,12 +1,11 @@
 const {Router} = require('express')
 const ToDoList = require('../../models/ToDoList')
-const TodoList = require('../models/ToDoList')
 
 const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    const toDoList = await TodoList.find()
+    const toDoList = await ToDoList.find()
     if (!toDoList) throw new Error('No To Do Items')
     const sorted = toDoList.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -17,8 +16,35 @@ router.get('/', async (req, res) => {
       message: error.message
     })
   }
-  
 })
+
+router.get('/', async (req, res) => {
+  try {
+    const toDoList = await ToDoList.find()
+    if (!toDoList) throw new Error('No To Do Items')
+    const sorted = toDoList.sort((a, b) => {
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
+    })
+    res.status(200).json(sorted)
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+})
+
+router.get('/:id', async (req, res) => {
+  try {
+    const toDoItem = await ToDoList.findOne({_id: req.body})
+    if (!toDoItem) throw new Error('Item doesn\'t exist')
+    res.status(200).json(toDoItem)
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    })
+  }
+})
+
 
 router.post('/', async (req, res) => {
   const newToDoItem = new ToDoList(req.body)
@@ -38,7 +64,7 @@ router.put("/:id", async (req, res) => {
   const {id} = req.params
 
   try {
-    const response = await ToDoList.findByIdAndUpdate(id, req,body)
+    const response = await ToDoList.findByIdAndUpdate(id, req.body)
     if (!response) throw Error('Something went wrong while updating item')
     const updated = { ...response._doc, ...req.body }
     res.status(200).json(updated)

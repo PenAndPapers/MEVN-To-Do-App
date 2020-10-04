@@ -27,6 +27,6 @@ mongoose
 
 app.use('/api/todo', toDoRoutes)
 
-app.get('/', (req, res) => res.send('hello world'))
+app.get('/', (req, res) => res.send('<h2 style="text-align:center; font-size: 32; font-family: sans-serif;">To Do App</h2>'))
 
 app.listen(PORT, () => console.log(`app is listening at http://localhost:${PORT}`))
