@@ -18,21 +18,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
-  try {
-    const toDoList = await ToDoList.find()
-    if (!toDoList) throw new Error('No To Do Items')
-    const sorted = toDoList.sort((a, b) => {
-      return new Date(a.date).getTime() - new Date(b.date).getTime()
-    })
-    res.status(200).json(sorted)
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    })
-  }
-})
-
 router.get('/:id', async (req, res) => {
   try {
     const toDoItem = await ToDoList.findOne({_id: req.body})
