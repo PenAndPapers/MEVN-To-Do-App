@@ -64,7 +64,7 @@ router.delete("/:id", async (req, res) => {
   const {id} = req.params
 
   try {
-    const removed = await ToDoList.findByIdAndDelete(id, req,body)
+    const removed = await ToDoList.findByIdAndDelete(id, req.body)
     if (!removed) throw Error('Something went wrong while deleting item')
     res.status(200).json(removed)
   } catch (error) {
